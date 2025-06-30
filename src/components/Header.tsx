@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ userLocation, lastUpdated }) => 
     <>
       <header className="bg-white/80 dark:bg-black/80 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-          <div className="flex justify-between items-center h-14 sm:h-16">
+          <div className="flex justify-between items-center h-16 sm:h-18 lg:h-20">
             <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
               <div className="flex items-center space-x-2 min-w-0 group">
                 <div className="relative">
@@ -61,21 +61,6 @@ export const Header: React.FC<HeaderProps> = ({ userLocation, lastUpdated }) => 
             </div>
 
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-              {/* Powered by Bolt.new Logo */}
-              <a 
-                href="https://bolt.new/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center mr-1 sm:mr-2 opacity-70 hover:opacity-100 transition-opacity duration-200 group"
-                title="Built with Bolt.new"
-              >
-                <img 
-                  src="/bolt-powered-by.png" 
-                  alt="Powered by Bolt" 
-                  className="h-4 w-auto sm:h-5 md:h-6 transition-transform duration-200 group-hover:scale-105"
-                />
-              </a>
-
               <div className="hidden lg:flex items-center text-xs text-gray-500 dark:text-gray-400 mr-2 bg-gray-100/50 dark:bg-gray-800/50 rounded-full px-3 py-1">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></div>
                 <span className="whitespace-nowrap">Updated {lastUpdated.toLocaleTimeString()}</span>
@@ -133,6 +118,21 @@ export const Header: React.FC<HeaderProps> = ({ userLocation, lastUpdated }) => 
                   </div>
                 )}
               </div>
+
+              {/* Powered by Bolt.new Logo - Top Right */}
+              <a 
+                href="https://bolt.new/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center ml-3 sm:ml-4 opacity-80 hover:opacity-100 transition-all duration-200 group"
+                title="Built with Bolt.new"
+              >
+                <img 
+                  src="/bolt-powered-by.png" 
+                  alt="Powered by Bolt" 
+                  className="h-6 w-auto sm:h-7 lg:h-8 transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
+                />
+              </a>
             </div>
           </div>
         </div>
