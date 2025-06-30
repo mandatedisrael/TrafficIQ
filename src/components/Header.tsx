@@ -61,6 +61,21 @@ export const Header: React.FC<HeaderProps> = ({ userLocation, lastUpdated }) => 
             </div>
 
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+              {/* Powered by Bolt.new Logo */}
+              <a 
+                href="https://bolt.new/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center mr-1 sm:mr-2 opacity-70 hover:opacity-100 transition-opacity duration-200 group"
+                title="Built with Bolt.new"
+              >
+                <img 
+                  src="/bolt-powered-by.png" 
+                  alt="Powered by Bolt" 
+                  className="h-4 w-auto sm:h-5 md:h-6 transition-transform duration-200 group-hover:scale-105"
+                />
+              </a>
+
               <div className="hidden lg:flex items-center text-xs text-gray-500 dark:text-gray-400 mr-2 bg-gray-100/50 dark:bg-gray-800/50 rounded-full px-3 py-1">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></div>
                 <span className="whitespace-nowrap">Updated {lastUpdated.toLocaleTimeString()}</span>
