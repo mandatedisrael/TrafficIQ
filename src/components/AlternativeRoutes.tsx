@@ -112,16 +112,7 @@ export const AlternativeRoutes: React.FC<AlternativeRoutesProps> = ({
   }
 
   if (!user) {
-    return (
-      <div className={`bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-800/50 p-4 sm:p-6 ${className}`}>
-        <div className="flex items-center justify-center space-x-3 py-8">
-          <AlertCircle className="h-6 w-6 text-gray-400" />
-          <span className="text-gray-500 dark:text-gray-400">
-            Sign in to see personalized route alternatives
-          </span>
-        </div>
-      </div>
-    );
+    return null; // Don't show anything if user is not signed in - the sign-in message will be at the bottom of the page
   }
 
   return (

@@ -6,13 +6,14 @@ import { PredictionChart } from './components/PredictionChart';
 import { AlternativeRoutes } from './components/AlternativeRoutes';
 import { AITrafficInsights } from './components/AITrafficInsights';
 import { FilterPanel } from './components/FilterPanel';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useGeolocation } from './hooks/useGeolocation';
 import { useTrafficData } from './hooks/useTrafficData';
 import { RouteResult } from './services/routeService';
 import { MapPin, AlertCircle, Sparkles } from 'lucide-react';
 
 function AppContent() {
+  const { user } = useAuth();
   const { location: userLocation, error: locationError, refreshLocation, isRequestingLocation } = useGeolocation();
   const { trafficData, lastUpdated, isLoading: trafficLoading, isAutoRefreshing: trafficAutoRefreshing, error: trafficError, refreshTrafficData } = useTrafficData(userLocation);
   
@@ -158,6 +159,17 @@ function AppContent() {
           </div>
         )}
 
+        {/* Sign in message at bottom */}
+        {!user && (
+          <div className="mt-6 sm:mt-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-800/50 p-4 sm:p-6 text-center animate-fadeIn">
+            <div className="flex items-center justify-center space-x-3 py-4">
+              <AlertCircle className="h-6 w-6 text-gray-400" />
+              <span className="text-gray-500 dark:text-gray-400">
+                Sign in to see personalized route alternatives
+              </span>
+            </div>
+          </div>
+        )}
 
       </main>
     </div>
