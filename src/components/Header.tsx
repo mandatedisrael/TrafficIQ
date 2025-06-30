@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ userLocation, lastUpdated }) => 
     <>
       <header className="bg-white/80 dark:bg-black/80 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-          <div className="flex justify-between items-center h-16 sm:h-18 lg:h-20">
+          <div className="flex justify-between items-center h-18 sm:h-20 lg:h-24">
             <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
               <div className="flex items-center space-x-2 min-w-0 group">
                 <div className="relative">
@@ -130,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({ userLocation, lastUpdated }) => 
                 <img 
                   src="/bolt-powered-by.png" 
                   alt="Powered by Bolt" 
-                  className="h-6 w-auto sm:h-7 lg:h-8 transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
+                  className="h-8 w-auto sm:h-10 lg:h-12 transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
                 />
               </a>
             </div>
