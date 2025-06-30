@@ -3,7 +3,18 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!supabaseUrl) {
+  console.error('Missing VITE_SUPABASE_URL environment variable');
+}
+
+if (!supabaseAnonKey) {
+  console.error('Missing VITE_SUPABASE_ANON_KEY environment variable');
+}
+
+// Create a fallback client if environment variables are missing (for development/demo purposes)
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 export interface TrafficRecord {
   id?: string;
@@ -63,6 +74,11 @@ export interface UserPreferences {
 export class SupabaseService {
   // Traffic Conditions
   static async saveTrafficCondition(condition: Omit<TrafficRecord, 'id'>): Promise<TrafficRecord | null> {
+    if (!supabase) {
+      console.warn('Supabase not configured - skipping traffic condition save');
+      return null;
+    }
+
     try {
       const { data, error } = await supabase
         .from('traffic_conditions')
@@ -82,6 +98,11 @@ export class SupabaseService {
     location: { lat: number; lng: number },
     radius: number = 10
   ): Promise<TrafficRecord[]> {
+    if (!supabase) {
+      console.warn('Supabase not configured - returning empty traffic conditions');
+      return [];
+    }
+
     try {
       // Using PostGIS functions for location-based queries
       const { data, error } = await supabase
