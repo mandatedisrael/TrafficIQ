@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Google Maps API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Direct Google Maps API Test</h1>
+    <p>Testing if Google Maps API returns the same data as the working URL</p>
+    
+    <button onclick="testDirectionsAPI()">Test Direct API Call</button>
+    <button onclick="testLocationAccess()">Test Location Access</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+
+        function log(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type === 'error' ? 'error' : 'success'}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            resultsDiv.appendChild(div);
+            console.log(message);
+        }
+
+        function testDirectionsAPI() {
+            log('Testing Directions API with test coordinates...');
+            
+            // Test with Lagos coordinates (similar to your working example)
+            const origin = 'Lagos, Nigeria';
+            const destination = 'Victoria Island, Lagos, Nigeria';
+            
+            // Using the exact same structure as the working URL you provided
+            const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&key=${API_KEY}`;
+            
+            log(`Making API call to: ${url}`);
+            
+            // Note: This will fail due to CORS in browser, but we can see the request
+            fetch(url)
+                .then(response => {
+                    log(`Response status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    log('API Response received!', 'success');
+                    log(`<pre>${JSON.stringify(data, null, 2).substring(0, 1000)}...</pre>`);
+                    
+                    if (data.routes && data.routes.length > 0) {
+                        const route = data.routes[0];
+                        const leg = route.legs[0];
+                        log(`✅ Route found: ${leg.distance.text}, ${leg.duration.text}`, 'success');
+                        if (leg.duration_in_traffic) {
+                            log(`✅ Traffic data: ${leg.duration_in_traffic.text}`, 'success');
+                        }
+                    }
+                })
+                .catch(error => {
+                    log(`❌ API Error (expected CORS): ${error.message}`, 'error');
+                    log('This CORS error is expected when calling REST API from browser. The app should use JavaScript SDK instead.', 'error');
+                });
+        }
+
+        function testLocationAccess() {
+            log('Testing location access...');
+            
+            if (!navigator.geolocation) {
+                log('❌ Geolocation not supported', 'error');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    log(`✅ Location obtained: ${lat}, ${lng}`, 'success');
+                    
+                    // Now test with user's actual location
+                    testWithUserLocation(lat, lng);
+                },
+                (error) => {
+                    log(`❌ Location error: ${error.message}`, 'error');
+                },
+                { timeout: 10000, enableHighAccuracy: true }
+            );
+        }
+
+        function testWithUserLocation(lat, lng) {
+            log(`Testing with user location: ${lat}, ${lng}`);
+            
+            // Test points around user location
+            const testPoints = [
+                { lat: lat + 0.01, lng: lng + 0.01 },
+                { lat: lat - 0.01, lng: lng - 0.01 },
+                { lat: lat + 0.01, lng: lng - 0.01 }
+            ];
+            
+            testPoints.forEach((point, index) => {
+                const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat},${lng}&destination=${point.lat},${point.lng}&key=${API_KEY}&departure_time=now`;
+                log(`Test point ${index + 1}: ${url}`);
+                
+                // This will show CORS error but demonstrates the correct API structure
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.routes && data.routes.length > 0) {
+                            const leg = data.routes[0].legs[0];
+                            log(`Point ${index + 1}: ${leg.distance.text}, ${leg.duration.text}`, 'success');
+                        }
+                    })
+                    .catch(error => {
+                        log(`Point ${index + 1} CORS error (expected): ${error.message}`, 'error');
+                    });
+            });
+        }
+
+        // Auto-start location test
+        window.onload = () => {
+            log('Page loaded. Ready to test Google Maps API.');
+            log('The REST API calls will show CORS errors (expected). This shows the correct API structure.');
+        };
+    </script>
+</body>
+</html> 
